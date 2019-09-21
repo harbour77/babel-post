@@ -1,0 +1,75 @@
+{% extends "babel/base.html" %}
+
+{% block content %}
+
+
+<div class="container bg-light shadow">
+  <h1>Comm platform - proof of concept</h1>
+  <p>This is a proof of concept for a multi-lingual communications platform. The goal is to demonstrate that automated machine translation is technically feasible... for translating short texts, in real time, between any two languages.
+  </p>
+  <br>
+</div>
+<div class="container bg-light shadow">
+<!------------------------------------------>
+
+  <!-- The language selection area -->
+
+  <div class="row border-bottom m-2">
+		<div class="input-group my-2">
+		  <label for="dropdownLang" class="col-4 col-form-label">Choose your language</label>
+			<div class="dropdown col-4">
+				<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{chosen_language.lang_native}} ({{chosen_language.lang_english}})
+				</a>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					{% for language in languages %}
+          <a class="dropdown-item" href="{% url 'language' language.lang_english %}">{{ language.lang_native}} ({{language.lang_english}})</a>
+          {% endfor %}
+				</div>
+			</div>
+		</div>
+  </div>
+
+  <!-- The most recent messages -->
+
+  {% for message in messages %}
+  <div class="row m-2">
+    <div class="col-md-2 col-sm-6" style="color: grey">{{ message.timestamp }}</div>
+    <div class="col-md-8 col-sm-12">{{ message.translated_text }}</div>
+    <div class="col-md-2 col-sm-6" style="color: grey;">{{ message.note }}</div>
+  </div>
+  {% endfor %}
+
+  <!--The posting are -->
+
+  <div class="row m-2">
+    <form class="w-100" action="{% url 'postmessage' chosen_language.lang_english %}" method="post">
+      <div class="form-group">
+        {% csrf_token %}
+        <div class="col-md-12 col-sm-12">
+          <label for="message_text">Say something</label>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <textarea class="form-control" rows="3" id="message_text" name="message_text" placeholder="You are writing in {{chosen_language.lang_english}}"></textarea>
+        </div>
+        <div class="col-md-12 col-sm-6 my-2">
+          <input class="btn btn-secondary" type="submit" value="Post">
+        </div>
+      </div>
+    </form>
+  </div>
+
+<!------------------------------------------>
+
+</div>
+
+{% endblock %}
+
+
+{% block afterbody%}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+{% endblock%}
