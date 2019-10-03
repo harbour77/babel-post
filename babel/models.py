@@ -1,6 +1,6 @@
 from django.db import models
 from google.cloud import translate
-from babel.services import *
+from babel.services import get_google_translation
 
 class Language(models.Model):
     # the language name in the original language, e.g. 'Magyar'
